@@ -1,6 +1,6 @@
 import numpy as np
-from iminuit import Minuit
-from iminuit.cost import LeastSquares
+#from iminuit import Minuit
+#from iminuit.cost import LeastSquares
 import matplotlib.pyplot as plt
 import os.path
 

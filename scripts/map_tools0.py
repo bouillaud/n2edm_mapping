@@ -229,7 +229,16 @@ class Geometry:
     H = 12
     Hp = 18
     
-    ### L_n coeffs from (<B_z>_TOP - <B_z>_BOT)/Hp for odd modes
+    ### coefs a_n = <rho B_rho> / (-R**2/4) in double chamber (odd) or single chamber (even)
+    a1 = 1
+    a2 = Hp # used to be Hp/2
+    a3 = -R**2/2 + (H**2 + 3*Hp**2)/4
+    a4 = (Hp**3 + Hp*H**2)/2 - R**2*Hp # used to be Hp/2 * ( -R**2 + (H**2 + Hp**2)/2 )
+    a5 = (5/8) * ( 8*R**4 - 2*R**2*(H**2 + 3*Hp**2)/3 + Hp**2*H**2 + (5*Hp**4 + H**4)/10 )
+    a6 = 0
+    a7 = 0
+    
+    ### L^n coeffs from (<B_z>_TOP - <B_z>_BOT)/Hp for odd modes
     L1 = 1
     L3 = 32.9**2
     L5 = 32.7**4
@@ -238,37 +247,23 @@ class Geometry:
                      - (21/12)*R**2*(3*Hp**4 + 10*Hp**2*H**2 + 3*H**4)
                      + (70/3)*R**4*(Hp**2 + H**2)
                      - (35/4)*R**6)
-    ### coefs a_n = <rho B_rho> / (-R**2/4) in double chamber (odd) or single chamber (even)
-    a1 = 1
-    a2 = Hp # used to be Hp/2
-    a3 = -R**2/2 + (H**2 + 3*Hp**2)/4
-    a4 = (Hp**3 + Hp*H**2)/2 - R**2*Hp # used to be Hp/2 * ( -R**2 + (H**2 + Hp**2)/2 )
-    a5 = (5*Hp**4 + 10*Hp**2*H**2 + H**4)/16 - 5*R**2*(3*Hp**2 + H**2)/12 + 5*R**4/16
-    a6 = (3*Hp**5 + 10*Hp**3*H**2 + 3*Hp*H**4)/16 - 5*R**2*(Hp**3 + Hp*H**2)/4 + 5*R**4*Hp/2
-    a7 = (7*Hp**6 + 35*Hp**4*H**2 + 21*Hp**2*H**4 + H**6)/64 - 7*R**2*(5*Hp**4 + 10*Hp**2*H**2 + H**4)/32 + 70*R**4*(3*Hp**2 + H**2)/128 - 7*R**6/32
     
-    ### coefs C_n = 1 / (1 +/- a_n/L_n) for odd modes 
+    ### coefs C_n = 1 / (1 + a_n/L^n) for odd modes 
     C1 = 1
-    C3 = 1 / (1 + a3/L3)
-    C5 = 1 / (1 - a5/L5)
-    C7 = 1 / (1 + a7/L7)
-#     C1 = 1
-#     C3 = 4*L3/(R**2 + 2*Hp**2)
-#     C5 = 48*L5/(15*R**4 + 10*R**2*(3*Hp**2-H**2) - 4*Hp**2*(3*Hp**2+5*H**2))
-#     R7 = (7/128)*R**2*( -(1/14)*(H**6 + 21*H**4 + 35*H**2*Hp**4 + 7*Hp**6) 
-#                        + R**2*(H**4 + 10*H**2*Hp**2 + 5*Hp**4) 
-#                        - (5*R**4/2)*(H**2 + 3*Hp**2) 
-#                        + R**6 )
-#     C7 = 1/(1 - (4*R7/(L7*R**2)))
-
-    ### normalization coefs D_n = G'_n / G_n, for odd modes = L_n / C_n
-    D1 = 1
-    D2 = a2
-    D3 = L3 + a3
-    D4 = a4
-    D5 = L5 - a5
-    D6 = a6
-    D7 = L7 + a7
+    C3 = 4*L3/(R**2 + 2*Hp**2)
+    C5 = 48*L5/(15*R**4 + 10*R**2*(3*Hp**2-H**2) - 4*Hp**2*(3*Hp**2+5*H**2))
+    R7 = (7/128)*R**2*( -(1/14)*(H**6 + 21*H**4 + 35*H**2*Hp**4 + 7*Hp**6) 
+                       + R**2*(H**4 + 10*H**2*Hp**2 + 5*Hp**4) 
+                       - (5*R**4/2)*(H**2 + 3*Hp**2) 
+                       + R**6 )
+    C7 = 1/(1 - (4*R7/(L7*R**2)))
+    
+    ### even-l (L_2n^2n-1 / c_2n)
+    LC2 = Hp
+    LC4 = (Hp**3 + Hp*H**2)/2 - R**2*Hp
+    
+    ### norm ceof
+    Leff = np.array([0, L1/C1, L1/C1])
     
     def volAvg(i, j, k, R=40, H=12, Hp=18, chamber='double'):
         """
