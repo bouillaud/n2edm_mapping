@@ -14,8 +14,12 @@ from map_run import *
 
 run = int(sys.argv[1])
 lmax = int(sys.argv[2])
-
-runmap = Run(run, np.arange(0, 150), dtformat='v4_PhiZswap', calib=True, trim=True)
+if len(sys.argv)>3:
+    dtformat = str(sys.argv[3])
+    print(dtformat)
+    runmap = Run(run, np.arange(0, 150), dtformat=dtformat, calib=True, trim=True)
+else:
+    runmap = Run(run, np.arange(0, 150), dtformat='v4_PhiZswap', calib=True, trim=True)
 
 ### get Glms
 G, G_err = runmap.getGlm(lmax, source='z')

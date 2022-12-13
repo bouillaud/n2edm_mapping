@@ -293,7 +293,7 @@ class Run:
             else:
                 cycles = self.cycles
                 
-            if self.dtformat=='v4':
+            if self.dtformat=='v4' or self.dtformat=='v4_PhiZswap':
                 calcycles = self.calcycles3
                 cal0, cal90, cal180  = 0, 0, 0
                 for c in calcycles:

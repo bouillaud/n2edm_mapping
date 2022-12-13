@@ -14,7 +14,7 @@ from map_run import *
 run1 = int(sys.argv[1])
 Gs1 = np.load("../data/spectrum_run{}_lmax7.npy".format(run1), allow_pickle=True)
 G1 = Gs1.item()['mainly_z']
-if len(sys.argv)>1:
+if len(sys.argv)>2:
     run2 = int(sys.argv[2])
     Gs2 = np.load("../data/spectrum_run{}_lmax7.npy".format(run2), allow_pickle=True)
     G2 = Gs2.item()['mainly_z']
