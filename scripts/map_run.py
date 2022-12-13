@@ -1,6 +1,6 @@
 import numpy as np
-#from iminuit import Minuit
-#from iminuit.cost import LeastSquares
+from iminuit import Minuit
+from iminuit.cost import LeastSquares
 import matplotlib.pyplot as plt
 import os.path
 
@@ -299,26 +299,29 @@ class Run:
                 for c in calcycles:
                     cyc = calcycles[c]
                     pinrot = int(cyc.pinmech[3][0])
+#                     print(pinrot)
                     if pinrot==0 and cal0==0:
                         cyc.cycFit(nfit=2)
                         Brho_off = cyc.par[0][0]
                         Bphi_off = cyc.par[1][0]
                         Bz_plus = cyc.par[2][0]
-                        if cal90==0:
-                            Bz_off = cyc.par[2][0]
+#                         if cal90==0:
+#                             Bz_off = cyc.par[2][0]
                         cal0 = 1
-                    if pinrot==90 and cal90==0:
-                        cyc.cycFit(nfit=2)
-                        Bz_off = cyc.par[2][0]
-                        cal90 = 1
-                    if pinrot==180:
+#                     if pinrot==90 and cal90==0:
+#                         cyc.cycFit(nfit=2)
+#                         Bz_off = cyc.par[2][0]
+#                         cal90 = 1
+                    if pinrot==180 and cal180==0:
                         cyc.cycFit(nfit=2)
                         Bz_minus = cyc.par[2][0]
                         cal180 = 1
                 if cal180==1:
-                    Bz_off = 0.5*(Bz_plus - Bz_minus)
-                if cal90==0 and cal180==0:
-                    print("/!\ B_z not properly calibrated /!\ ")
+                    Bz_off = 0.5*(Bz_plus + Bz_minus)
+                    print("Bz calibrated with 180 pin rot")
+                else:
+                    Bz_off = 0
+                    print("/!\ Bz not calibrated /!\ ")
             else:
                 calcycles = self.calcycles
                 cs = []
@@ -560,7 +563,7 @@ class Run:
         g, g_err = Fits.GlmPoly(iB, a, a_err, rings, m, lmin, lmax)
         return g, g_err
 
-    def getGlm(self, lmax, source='rho', norm=True):
+    def getGlm(self, lmax, source='rho', norm=True, force=False):
         """
         source = "rho", "phi" or "z"
         """
@@ -569,7 +572,7 @@ class Run:
             G_err = self.G_err
             source0 = self.Gsource
             lmax0 = self.lmax
-            if lmax==lmax0 and source==source0:
+            if lmax==lmax0 and source==source0 and force==False:
                 return G, G_err
             else:
                 self.getPars(nfit=lmax+1)
