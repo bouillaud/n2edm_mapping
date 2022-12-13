@@ -7,6 +7,10 @@ from map_tools import *
 from map_cycle import *
 from map_run import *
 
+#####################################################
+### usage: python3 GlmPlot.py run_number1 run_number2
+### saves a spectrum plot of the two runs in ../plots
+
 run1 = int(sys.argv[1])
 Gs1 = np.load("../data/spectrum_run{}_lmax7.npy".format(run1), allow_pickle=True)
 G1 = Gs1.item()['mainly_z']
@@ -31,13 +35,13 @@ for l in range(1, lmax0+1):
     L = abs(vars(Geometry)['D{}'.format(l)])
     for m in M:
         if l0==0 and m==0:
-            axs[l0].bar(m, L*G1[l][7+1+m], color='tab:green', width=dm)
+            axs[l0].bar(m, L*G1[l][7+1+m], color='green', alpha=0.5, width=dm)
             if len(sys.argv)>1:
-                axs[l0].bar(m+dm, L*G2[l][7+1+m], color='tab:blue', width=dm)
+                axs[l0].bar(m+dm, L*G2[l][7+1+m], color='blue', alpha=0.5, width=dm)
         else:
-            axs[l0].bar(m, L*G1[l][7+1+m], color='tab:green', width=dm)
+            axs[l0].bar(m, L*G1[l][7+1+m], color='green', alpha=0.5, width=dm)
             if len(sys.argv)>1:
-                axs[l0].bar(m+dm, L*G2[l][7+1+m], color='tab:blue', width=dm)
+                axs[l0].bar(m+dm, L*G2[l][7+1+m], color='blue', alpha=0.5, width=dm)
     axs[l0].grid()
     #axs[l0].locator_params(axis='y', nbins=5)
     axs[l0].set_ylabel(r"$D_{{{}}}^{{{}}} \times G_{{ {}m }}$ (pT/cm)".format(l, l-1, l), size=20)

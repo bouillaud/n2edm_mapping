@@ -7,6 +7,10 @@ from map_tools import *
 from map_cycle import *
 from map_run import *
 
+################################################################################################
+### usage: python3 GlmExtraction.py run_number maximum_l
+### saves a numpy array containing Glm spectra from z, rho, and z-rho probes combined in ../data
+### as well as a spectrum plot in ../plots
 
 run = int(sys.argv[1])
 lmax = int(sys.argv[2])
