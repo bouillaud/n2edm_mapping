@@ -320,7 +320,7 @@ class Geometry:
                 a = 3*R**8/640
             else:
                 print("i+j too high")
-        print(a, b)
+        #print(a, b)
         return a*b
 
 
@@ -344,7 +344,7 @@ class Geometry:
             elif m==-1:
                 b = 2*Geometry.volAvg(0, 1, 1)
             elif m==0:
-                b = Geometry.volAvg(0, 0, 2) - 0.5*(Geometry.volAvg(1, 0, 0)+Geometry.volAvg(0, 1, 0))
+                b = Geometry.volAvg(0, 0, 2) - 0.5*(Geometry.volAvg(2, 0, 0)+Geometry.volAvg(0, 2, 0))
             elif m==1:
                 b = 2*Geometry.volAvg(1, 0, 1)
             elif m==2:
@@ -370,7 +370,6 @@ class Geometry:
         elif l==2:
             if m==0:
                 b2 = Geometry.volAvg(0, 0, 4) - 2*Geometry.volAvg(2, 0, 2) + 0.5*(Geometry.volAvg(4, 0, 0) + Geometry.volAvg(2, 2, 0))
-                
             elif abs(m)==1:
                 b2 = 4*Geometry.volAvg(0, 2, 2)
             elif abs(m)==2:
