@@ -1,2 +1,6 @@
 maps_bin/*
 scripts/__pycache__/*
+.DS_Store
+.jupyter/*
+scripts/.DS_Store
+scripts/.ipynb_checkpoints/*
