@@ -8,9 +8,11 @@ from map_cycle import *
 from map_run import *
 
 ################################################################################################
-### usage: python3 GlmExtraction.py run_number maximum_l
+### usage: python3 GlmExtraction.py run_number maximum_l dtformat
 ### saves a numpy array containing Glm spectra from z, rho, and z-rho probes combined in ../data
 ### as well as a spectrum plot in ../plots
+### the dtformat argument is optional, will default to latest
+### available data formats: v1 v2 v3 v3swap v4 v4_PhiWswap 
 
 run = int(sys.argv[1])
 lmax = int(sys.argv[2])
@@ -22,11 +24,13 @@ else:
     runmap = Run(run, np.arange(0, 150), dtformat='v4_PhiZswap', calib=True, trim=True)
 
 ### get Glms
+
 G, G_err = runmap.getGlm(lmax, source='z')
 G, G_err = runmap.getGlm(lmax, source='rho')
 G, G_err = runmap.combineGlm(mode='z')
 
 ## save Glms
+
 Gname = "spectrum_run{}_lmax{}".format(run, lmax)
 Gerrname = "spectrumErr_run{}_lmax{}".format(run, lmax)
 #i=0
@@ -37,11 +41,15 @@ Gerrname = "spectrumErr_run{}_lmax{}".format(run, lmax)
 np.save("../data/{}".format(Gname), runmap.Gs, allow_pickle=True)
 np.save("../data/{}".format(Gerrname), runmap.Gs_err, allow_pickle=True)
 print("Gs saved")
-
 print("G_00 = {:.2e} +/- {:.2e}".format(G[0][lmax+1+0], G_err[0][lmax+1+0]))
 print("G_1 = {:.2e} +/- {:.2e}".format(G[1][lmax+1+0], G_err[1][lmax+1+0]))
-print("phanG_3 = {:.2e} +/- {:.2e}".format(G[3][lmax+1+0]*Geometry.L3/Geometry.C3, G_err[3][lmax+1+0]**Geometry.L3/Geometry.C3))
-print("phanG_5 = {:.2e} +/- {:.2e}".format(G[5][lmax+1+0]*Geometry.L5/Geometry.C5, G_err[5][lmax+1+0]*Geometry.L5/Geometry.C5))
+if lmax>=3:
+    print("phanG_3 = {:.2e} +/- {:.2e}".format(G[3][lmax+1+0]*Geometry.L3/Geometry.C3, G_err[3][lmax+1+0]**Geometry.L3/Geometry.C3))
+if lmax>=5:
+    print("phanG_5 = {:.2e} +/- {:.2e}".format(G[5][lmax+1+0]*Geometry.L5/Geometry.C5, G_err[5][lmax+1+0]*Geometry.L5/Geometry.C5))
+if lmax>=7:
+    print("phanG_7 = {:.2e} +/- {:.2e}".format(G[7][lmax+1+0]*Geometry.L7/Geometry.C7, G_err[7][lmax+1+0]*Geometry.L7/Geometry.C7))
+
 
 ### plot Glms
 
@@ -61,9 +69,9 @@ for l in range(1, lmax0+1):
     #print(L)
     for m in M:
         if l0==0 and m==0:
-            axs[l0].bar(m, L*G[l][7+1+m], yerr=L*G_err[l][7+1+m], align='center', color='tab:blue', ecolor='black', capsize=5, width=dm)
+            axs[l0].bar(m, L*G[l][lmax+1+m], yerr=L*G_err[l][lmax+1+m], align='center', color='tab:blue', ecolor='black', capsize=5, width=dm)
         else:
-            axs[l0].bar(m, L*G[l][7+1+m], yerr=L*G_err[l][7+1+m], align='center', color='tab:blue', ecolor='black', capsize=5, width=dm)
+            axs[l0].bar(m, L*G[l][lmax+1+m], yerr=L*G_err[l][lmax+1+m], align='center', color='tab:blue', ecolor='black', capsize=5, width=dm)
     axs[l0].grid()
     #axs[l0].locator_params(axis='y', nbins=5)
     axs[l0].set_ylabel(r"$D_{{{}}}^{{{}}} \times G_{{ {}m }}$ (pT/cm)".format(l, l-1, l), size=20)
